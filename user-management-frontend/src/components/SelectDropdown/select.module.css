@@ -1,0 +1,17 @@
+.select_wrap select {
+    padding: 7px;
+    border-radius: 8px;
+    background: transparent;
+    appearance: none;
+    min-width: 50px;
+}
+.select_wrap {
+    user-select: none;
+    position: relative
+}
+.select_icon {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+}

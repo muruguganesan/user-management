@@ -1,0 +1,8 @@
+.search_input {
+    padding: 10px;
+    border: 1px solid #afafaf;
+    border-radius: 5px;
+}
+.search_wrap {
+    user-select: none;
+}

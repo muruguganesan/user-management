@@ -1,0 +1,28 @@
+.table_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-top: 1px solid #afafaf;
+    border-inline: 1px solid #afafaf;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.table_wrapper {
+    padding-top: 30px;
+
+}
+.action_btns {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+.table th, .table td {
+    border: 1px solid #afafaf;
+    padding: 10px;
+}

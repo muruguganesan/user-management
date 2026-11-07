@@ -1,0 +1,20 @@
+.reusable_btn {
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    border: 1px solid var(--bg-color);
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    user-select: none;
+    font-weight: 600;
+
+    color: var(--color);
+    background-color: var(--bg-color);
+    transition: color 0.5s, background-color 0.5s;
+}
+.reusable_btn:hover {
+    color: var(--bg-color);
+    background-color: var(--color);
+}

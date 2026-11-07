@@ -1,0 +1,24 @@
+.page_box {
+    padding: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    border: 1px solid #afafaf;
+    border-radius: 5px;
+    min-width: 38px;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+.pagination_wrapper {
+    display: flex;
+    gap: 5px;
+}
+.disable_btn {
+    cursor: not-allowed;
+}
+.btn_active {
+   background-color: blue;
+   color: white;
+}

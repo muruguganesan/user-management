@@ -13,15 +13,15 @@ const db = mysql.createPool({
 });
 
 // Test Connection (Async Function)
-(async () => {
-    try {
-        const connection = await db.getConnection();
-        console.log("Server is running...");
-        connection.release();
-    }
-    catch (err) {
-        console.error(`My SQL connection failed: ${err}`);
-    }
-})();
+// (async () => {
+//     try {
+//         const connection = await db.getConnection();
+//         console.log("Server is running...");
+//         connection.release();
+//     }
+//     catch (err) {
+//         console.error(`My SQL connection failed: ${err}`);
+//     }
+// })();
 
 module.exports = db;

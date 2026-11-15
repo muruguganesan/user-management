@@ -6,3 +6,6 @@ export type ButtonType = {
     bgColor?: string;
     icon?: ReactNode | string; 
 }
+export type LinkButtonType = ButtonType & {
+    href?: string;
+}

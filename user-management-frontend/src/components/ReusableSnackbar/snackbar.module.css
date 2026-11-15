@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.close_btn {
+    height: 24px;
+}
+.snacbar_in {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background: #484848;
+    color: #fff;
+}
+.snackbar {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}

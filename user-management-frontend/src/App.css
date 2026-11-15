@@ -7,6 +7,8 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  user-select: text;
+  caret-color: transparent;
 }
 html {
   scroll-behavior: smooth;
@@ -65,4 +67,22 @@ p, .limit_sec label {
   justify-content: space-between;
   align-items: center;
   padding-top: 15px;
+}
+.btn_wrap {
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.btn_wrap .link_btn {
+    gap: 10px;
+    border-radius: 12px;
+}
+.com_title {
+  color: #4f46e5;
+}
+
+@media(max-width: 1200px) {
+  .c {
+    padding: 0 40px;
+  }
 }

@@ -2,6 +2,7 @@
     padding: 10px;
     border: 1px solid #afafaf;
     border-radius: 5px;
+    caret-color: black;
 }
 .search_wrap {
     user-select: none;

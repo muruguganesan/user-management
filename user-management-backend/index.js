@@ -1,7 +1,9 @@
 // Import Packages
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const usersRoutes = require("./routes/usersRoutes");
+const path = require("path");
 
 // Config DotEnv
 dotenv.config();
@@ -11,6 +13,19 @@ const PORT = process.env.PORT || 3000;  // Port with Fallback
 
 // Initialize or Create Express App
 const app = express();
+
+// Parse JSON
+app.use(express.json());
+
+// Enable CORS
+app.use(cors());
+
+// Access Static Files
+// app.use(express.static("uploads"));
+app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "uploads"))
+);
 
 app.use("/api/v1/users", usersRoutes)
 

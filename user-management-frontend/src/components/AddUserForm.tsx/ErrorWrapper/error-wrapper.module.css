@@ -1,0 +1,8 @@
+.error_wrapper {
+    color: red;
+    height: 25px;
+    font-size: 14px;
+    user-select: text;
+    caret-color: transparent;
+    padding-top: 5px;
+}

@@ -1,15 +1,16 @@
-import { useEffect, useState, type ChangeEvent } from 'react'
+import { useEffect, type ChangeEvent } from 'react'
 import type { SearchType } from './SearchType'
 import styles from "./search.module.css"
 import { useSearchParams } from 'react-router-dom';
 
 
 
-export const Search = ({ placeholder = "Search..." }: SearchType) => {
+export const Search = ({ placeholder = "Search...", search, handleSearch }: SearchType) => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [search, setSearch] = useState(
-        searchParams.get("search") || ""
-    );
+    // const [search, setSearch] = useState(
+    //     searchParams.get("search") || ""
+    // );
+    console.warn("searchParams",searchParams);
 
 
 
@@ -28,7 +29,7 @@ export const Search = ({ placeholder = "Search..." }: SearchType) => {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         console.log("e.target.value", e.target.value);
-        setSearch(e.target.value);
+        handleSearch(e);
     }
 
     return (

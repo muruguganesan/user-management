@@ -9,7 +9,9 @@ const db = mysql.createPool({
     host: pEnv.DB_HOSTNAME || "localhost",
     database: pEnv.DB_NAME || "",
     user: pEnv.DB_USERNAME || "",
-    password: pEnv.DB_PASSWORD || ""
+    password: pEnv.DB_PASSWORD || "",
+    waitForConnections: true,
+    connectionLimit: 10
 });
 
 // Test Connection (Async Function)

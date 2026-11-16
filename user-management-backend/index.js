@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const usersRoutes = require("./routes/usersRoutes");
 const path = require("path");
+const authRouter = require("./routes/authRoutes");
 
 // Config DotEnv
 dotenv.config();
@@ -27,7 +28,8 @@ app.use(
     express.static(path.join(__dirname, "uploads"))
 );
 
-app.use("/api/v1/users", usersRoutes)
+app.use("/api/v1/users", usersRoutes);
+app.use("/api/v1/auth", authRouter);
 
 // app.get("/", (req, res) => {
 //     // res.status(400).send("Hello World");

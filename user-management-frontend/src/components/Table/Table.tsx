@@ -11,6 +11,7 @@ import { useSearchParams } from 'react-router-dom';
 import Modal from '../Modal/Modal';
 import useDeleteUser from '../../hooks/reactQueryHooks/useDeleteUser';
 import LinkButton from '../Button/LinkButton';
+import no_person_fnd from "/no_person_fnd.png";
 
 const Table = () => {
     const [searchParams] = useSearchParams();
@@ -25,7 +26,10 @@ const Table = () => {
 
     console.log("data", data);
 
-    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value)
+    };
+    const clearSearchValueFn = () => setSearch("");
     const handleLimit = (e: ChangeEvent<HTMLSelectElement>) => setLimit(Number(e.target.value));
     const handlePage = (value: number) => setPage(value);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -101,7 +105,7 @@ const Table = () => {
             <div className={styles.table_wrapper}>
                 <div className={styles.table_header}>
                     <h3>All Users</h3>
-                    <Search placeholder='Search Users...' search={search} handleSearch={handleSearch} />
+                    <Search placeholder='Search Users...' search={search} handleSearch={handleSearch} clearSearchValueFn={clearSearchValueFn} />
                 </div>
                 <div className={styles.table_wrap}>
                     <table className={styles.table}>
@@ -135,7 +139,7 @@ const Table = () => {
                                         <td>
                                             <div className={styles.action_btns}>
                                                 <LinkButton text="View" icon={<Eye size={20} />} color="#2563eb" bgColor='#eff6ff' href={`/view-user/${ele.id}`} />
-                                                <LinkButton text="Edit" icon={<Pen size={20} />} color="#b45309" bgColor='#fef3c7' href={`/edit-user/${ele.id}`}  />
+                                                <LinkButton text="Edit" icon={<Pen size={20} />} color="#b45309" bgColor='#fef3c7' href={`/edit-user/${ele.id}`} />
                                                 <Button text="Delete" icon={<Trash size={20} />} color="#dc2626" bgColor='#fee2e2' onClick={() => onDeleteModalOpen(ele.id)} />
                                             </div>
                                         </td>
@@ -143,7 +147,7 @@ const Table = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={5}>No users found</td>
+                                    <td colSpan={5}><div className='no_user_wrap'><img src={no_person_fnd} alt="" /></div></td>
                                 </tr>
                             )}
 

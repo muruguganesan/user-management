@@ -97,9 +97,9 @@ export const editUser = async ({
   }
 
     // Debug FormData
-  for (const [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
+//   for (const [key, value] of formData.entries()) {
+//     console.log(key, value);
+//   }
 
   const response = await api.put(`/users/${id}`, formData);
 

@@ -1,5 +1,4 @@
-const db = require("../db");
-const multer = require("multer");
+const db = require("../config/db");
 
 const getAllUsers = async (req, res) => {
 

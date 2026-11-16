@@ -80,6 +80,14 @@ p, .limit_sec label {
 .com_title {
   color: #4f46e5;
 }
+.no_user_wrap {
+  display: flex;
+  justify-content: center;
+}
+.no_user_wrap img {
+  width: 100px;
+  height: 100px;
+}
 
 @media(max-width: 1200px) {
   .c {

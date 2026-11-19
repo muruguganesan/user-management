@@ -1,0 +1,21 @@
+.login_social {
+    padding: 11px 22px;
+    background-color: #F0EDFF;
+    border: 1px solid #F0EDFF;
+    border-radius: 10px;
+    min-width: 400px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+    transition: box-shadow 0.8s;
+}
+.login_social img {
+    width: 30px;
+    height: 30px;
+}
+.login_social:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

@@ -36,6 +36,9 @@ const AddUserForm = ({
   formType = "add"
 }: AddUserFormProps) => {
 
+  const PORT = import.meta.env.VITE_PORT;
+  console.log("PORT", PORT);
+
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -90,7 +93,7 @@ const AddUserForm = ({
 
     if (individualData?.photo) {
       setPreview(
-        `http://localhost:8000/uploads/${individualData.photo}`
+        `http://localhost:${PORT}/uploads/${individualData.photo}`
       );
     } else {
       setPreview(no_img_fnd);
@@ -289,7 +292,7 @@ const AddUserForm = ({
                     className={styles.photo}
                     src={
                       individualData?.photo
-                        ? `http://localhost:8000/uploads/${individualData.photo}`
+                        ? `http://localhost:${PORT}/uploads/${individualData.photo}`
                         : no_img_fnd
                     }
                     alt="User"

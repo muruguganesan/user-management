@@ -5,6 +5,7 @@ export type ButtonType = {
     color?: string;
     bgColor?: string;
     icon?: ReactNode | string; 
+    type?: "button" | "submit" | "reset" | undefined;
 }
 export type LinkButtonType = ButtonType & {
     href?: string;

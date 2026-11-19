@@ -25,10 +25,17 @@ body {
   margin: 0 auto;
 }
 .section_padding {
-  padding-block: 100px;
+  padding-block: 75px;
 }
 .user_select_none {
   user-select: none;
+}
+.row {
+    display: flex;
+    align-items: center;
+}
+.col_2 {
+    width: 50%;
 }
 
 /* Custom CSS */
@@ -87,6 +94,9 @@ p, .limit_sec label {
 .no_user_wrap img {
   width: 100px;
   height: 100px;
+}
+.add_user {
+  height: calc(100vh - 103px);
 }
 
 @media(max-width: 1200px) {

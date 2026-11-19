@@ -1,0 +1,10 @@
+.header_in, .header_rgt {
+    display: flex;
+    gap: 15px;
+}
+.header {
+    padding-block: 30px;
+}
+.header_in {
+    justify-content: space-between;
+}

@@ -16,7 +16,7 @@ const registerSchema = z.object({
         .max(100, "Name should not be more than 50 Characters"),
 
     email: z.string().trim()
-        .min(1, "Name is required")
+        .min(1, "Email is required")
         .email("Invalid Email Address"),
 
     password: passwordPolicy,
@@ -26,6 +26,13 @@ const registerSchema = z.object({
     path: ["confirmPassword"]
 });
 
-export type RegisterFormDataType = z.infer<typeof registerSchema>;
 
-export { registerSchema };
+const loginSchema = z.object({
+    email: z.string().trim().min(1, "Email is required").email("Invalid Email address"),
+    password: z.string().min(1, "Password is required")
+});
+
+export type RegisterFormDataType = z.infer<typeof registerSchema>;
+export type LoginFormDataType = z.infer<typeof loginSchema>;
+
+export { registerSchema, loginSchema };

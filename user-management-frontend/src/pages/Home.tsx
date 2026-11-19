@@ -6,12 +6,14 @@ const Home = () => {
     return (
         <div className="home section_padding">
             <div className="c">
+
                 <header>
                     <div className="heading_left">
                         <h1>User Management</h1>
                         <p>Manage and organize your users</p>
                     </div>
-                    <LinkButton text="Add User" href="/add-user" icon={<Plus size={15} />}  />
+                    <LinkButton text="Add User" href="/add-user" icon={<Plus size={15} />} />
+
                 </header>
                 <Table />
 

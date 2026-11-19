@@ -18,16 +18,21 @@ const Table = () => {
 
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
+    const [searchBefore, setSearchBefore] = useState(searchParams.get("search") || "");
     const [search, setSearch] = useState(searchParams.get("search") || "");
 
     // Tanstack Hooks
-    const { data, isLoading, isError, error } = useUsers(page, limit, search);
+    const { data, isLoading, isError, error } = useUsers(page, limit, searchBefore);
     const { mutate: removeUser } = useDeleteUser();
 
     console.log("data", data);
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value)
+        setSearch(e.target.value);
+        const timer = setTimeout(()=>{
+            setSearchBefore(search);
+        }, 800);
+        return () => clearTimeout(timer);
     };
     const clearSearchValueFn = () => setSearch("");
     const handleLimit = (e: ChangeEvent<HTMLSelectElement>) => setLimit(Number(e.target.value));

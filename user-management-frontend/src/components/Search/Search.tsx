@@ -22,10 +22,10 @@ export const Search = ({ placeholder = "Search...", search, handleSearch, clearS
             } else {
                 setSearchParams({});
             }
-        }, 500);
+        }, 3500);
 
         return () => clearTimeout(timer);
-    }, [search, setSearchParams, clearSearchValueFn]);
+    }, [search, setSearchParams]);
 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

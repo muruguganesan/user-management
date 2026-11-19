@@ -8,9 +8,21 @@ import Home from './pages/Home';
 import AddUser from './pages/AddUser';
 import ViewUser from './pages/ViewUser';
 import EditUser from './pages/EditUser';
+import Header from './components/Header/Header';
+import Login from './pages/Login';
+import Register from './pages/Register/Register';
 
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+    },
+  },
+});
 
 function App() {
 
@@ -19,11 +31,16 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+      <Header />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/add-user" element={<AddUser />} />
         <Route path="/view-user/:id" element={<ViewUser />} />
         <Route path="/edit-user/:id" element={<EditUser />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
 
         {/* EditUser */}
 

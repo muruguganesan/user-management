@@ -26,4 +26,11 @@ const registerSchema = z.object({
     path: ["confirmPassword"]
 });
 
-module.exports = { registerSchema };
+const loginSchema = z.object({
+    email: z.string().trim().min(1, "Email is required").email("Invalid Email address"),
+    password: z.string().min(1, "Password is required")
+});
+
+
+
+module.exports = { registerSchema, loginSchema };

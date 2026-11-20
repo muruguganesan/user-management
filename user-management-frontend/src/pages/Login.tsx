@@ -10,10 +10,15 @@ import google from "/public/google.png";
 import facebook from "/public/facebook.png";
 import loginBg from "/public/login_bg.png";
 import women from "/public/women.png";
+import useLoginUser from '../hooks/reactQueryHooks/useLoginUser';
+import { useNavigate } from 'react-router-dom';
+import ReusableSnackbar from '../components/ReusableSnackbar/ReusableSnackbar';
 
 
 
 const Login = () => {
+  const { mutate: LoginUser } = useLoginUser();
+
   const { register, handleSubmit, formState: { errors }, watch, reset } = useForm<LoginFormDataType>({
     defaultValues: {
       email: "",
@@ -28,8 +33,31 @@ const Login = () => {
   const handlePasswordType = (type: string, value: string) => {
     setPasswordTypes((prev) => ({ ...prev, [type]: value }))
   }
+  const [popOverOpen, setPopOverOpen] = useState(false);
+  const navigate = useNavigate();
+  // Snackbar functions
+  const popOverOpenFn = () => setPopOverOpen(true);
+  const popOverCloseFn = () => setPopOverOpen(false);
+
+
+  // Common success callback
+  const handleSuccess = () => {
+    popOverOpenFn();
+    watch();
+    reset();
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
+  };
   const onSubmitFn = (data: LoginFormDataType) => {
     console.log("data", data);
+    LoginUser(data, {
+      onSuccess: handleSuccess,
+      onError: (error) => {
+        console.error("Failed to Login user", error);
+      }
+
+    });
   }
 
   const handleResetFn = () => {
@@ -91,10 +119,10 @@ const Login = () => {
 
         </div>
         <div className="col_2">
-          <div style={{backgroundImage: `url(${loginBg})`}} className={styles.login_bg_cont}>
+          <div style={{ backgroundImage: `url(${loginBg})` }} className={styles.login_bg_cont}>
             <div className={styles.women_img_wrap}>
               <div className={styles.login_text}>Login to see exciting works !!!</div>
-            <img src={women} alt="" className={styles.women_img} />
+              <img src={women} alt="" className={styles.women_img} />
 
             </div>
 
@@ -102,6 +130,12 @@ const Login = () => {
 
         </div>
       </div>
+      <ReusableSnackbar
+        isOpen={popOverOpen}
+        onClose={popOverCloseFn}
+      >
+        <span>User Login Successfully</span>
+      </ReusableSnackbar>
     </div>
   )
 }

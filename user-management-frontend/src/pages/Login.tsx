@@ -13,6 +13,7 @@ import women from "/public/women.png";
 import useLoginUser from '../hooks/reactQueryHooks/useLoginUser';
 import { useNavigate } from 'react-router-dom';
 import ReusableSnackbar from '../components/ReusableSnackbar/ReusableSnackbar';
+import { useAuth } from '../context/AuthContext';
 
 
 
@@ -38,13 +39,14 @@ const Login = () => {
   // Snackbar functions
   const popOverOpenFn = () => setPopOverOpen(true);
   const popOverCloseFn = () => setPopOverOpen(false);
-
+const { setAuthenticated } = useAuth();
 
   // Common success callback
   const handleSuccess = () => {
     popOverOpenFn();
     watch();
     reset();
+    setAuthenticated(true);
     setTimeout(() => {
       navigate("/profile", {replace: true});
     }, 2000);

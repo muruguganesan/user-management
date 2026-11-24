@@ -1,5 +1,6 @@
+import { tokenStore } from "../../services/tokenStore";
 
-const useHavingToken = () => Boolean(localStorage.getItem('access_token'));
+const useHavingToken = () => Boolean(tokenStore.get());
 
 
 export default useHavingToken;

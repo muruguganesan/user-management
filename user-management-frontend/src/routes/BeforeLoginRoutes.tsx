@@ -1,7 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { tokenStore } from "../services/tokenStore";
 
 const BeforeLoginRoutes = () => {
-    const token = localStorage.getItem("access_token");
+       const token = tokenStore.get();
     if (token) {
         return <Navigate to="/profile" replace />
     }

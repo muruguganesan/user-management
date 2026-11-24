@@ -5,6 +5,7 @@ const cors = require("cors");
 const usersRoutes = require("./routes/usersRoutes");
 const path = require("path");
 const authRouter = require("./routes/authRoutes");
+const cookieParser = require("cookie-parser");
 
 // Config DotEnv
 dotenv.config();
@@ -19,7 +20,14 @@ const app = express();
 app.use(express.json());
 
 // Enable CORS
-app.use(cors());
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true
+}));
+// app.use(cors());
+
+// Make Cookie available through req.cookies
+app.use(cookieParser());
 
 // Access Static Files
 // app.use(express.static("uploads"));

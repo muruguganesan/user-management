@@ -74,20 +74,20 @@ const login = async (req, res) => {
         }
 
         // Generate Token Family ID
-        const familyId = crypto.randomUUID();
+        const family_id = crypto.randomUUID();
 
         // Generate Access Token
         const access_token = generateAccessToken(user);
 
         // Generate Refresh Token
-        const refresh_token = generateRefreshToken(user, familyId);
+        const refresh_token = generateRefreshToken(user, family_id);
 
         // Hash Refresh Token
         const hashed_refresh_tok = hashToken(refresh_token);
 
         // Store Hash in MySQL - refresh_tokens table
         await db.query(`INSERT INTO refresh_tokens (user_id, token_hash, family_id, expires_at) 
-            VALUES (?, ?, ?, DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? DAY))`, [user.id, hashed_refresh_tok, familyId, Number(process.env.JWT_REFRESH_DAYS || 7)]);
+            VALUES (?, ?, ?, DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? DAY))`, [user.id, hashed_refresh_tok, family_id, Number(process.env.JWT_REFRESH_DAYS || 7)]);
 
         // Send Refresh Token using HTTP only cookie
         res.cookie("refreshToken", refresh_token, refreshCookieOptions);

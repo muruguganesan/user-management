@@ -46,7 +46,7 @@ const Login = () => {
     watch();
     reset();
     setTimeout(() => {
-      navigate("/");
+      navigate("/profile", {replace: true});
     }, 2000);
   };
   const onSubmitFn = (data: LoginFormDataType) => {

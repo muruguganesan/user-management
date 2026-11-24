@@ -1,0 +1,33 @@
+.profile_wrapper {
+    height: calc(100vh - 105px);
+}
+.profile_sec_wrap {
+    padding: 30px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.profile_icon_text {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.profile_status_sec {
+    display: flex;
+    justify-content: space-between;
+}
+.profile_sec_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+}
+.profile_sub_tit {
+        font-size: 17px;
+    font-weight: 500;
+}
+:global(.profile_chip_wrap .chip, .profile_sec_col .chip){
+    padding: 8px 21px;
+    margin-top: 10px;
+}

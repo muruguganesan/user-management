@@ -11,6 +11,9 @@ import EditUser from './pages/EditUser';
 import Header from './components/Header/Header';
 import Login from './pages/Login';
 import Register from './pages/Register/Register';
+import Profile from './pages/Profile/Profile';
+import ProtectedRoutes from './routes/ProtectedRoutes';
+import BeforeLoginRoutes from './routes/BeforeLoginRoutes';
 
 
 export const queryClient = new QueryClient({
@@ -31,20 +34,26 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-      <Header />
+        <Header />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/add-user" element={<AddUser />} />
-        <Route path="/view-user/:id" element={<ViewUser />} />
-        <Route path="/edit-user/:id" element={<EditUser />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/add-user" element={<AddUser />} />
+          <Route path="/view-user/:id" element={<ViewUser />} />
+          <Route path="/edit-user/:id" element={<EditUser />} />
+          <Route element={<BeforeLoginRoutes />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
 
 
-        {/* EditUser */}
 
-      </Routes>
+          {/* EditUser */}
+
+        </Routes>
         {/* <div className="home section_padding">
           <div className="c">
             <header>

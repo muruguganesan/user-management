@@ -1,5 +1,6 @@
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
+const { generateAccessToken } = require("../utils/token");
 
 const register = async(req, res) => {
     try {
@@ -68,10 +69,13 @@ const login = async (req, res) => {
                 message: "Invalid Credentials"
             });
         }
+        const access_token = generateAccessToken(user);
+
         return res.status(200).json({
             state: true,
             status: 200,
             message: "Login Successful",
+            access_token,
             data: {
                 id: user.id,
                 name: user.name,
@@ -89,4 +93,4 @@ const login = async (req, res) => {
     }
 }
 
-module.exports = { register, login};
+module.exports = { register, login };

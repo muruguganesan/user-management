@@ -5,6 +5,8 @@ const usersController = require("../controllers/usersController");
 const multer = require("multer");
 const crypto = require("crypto");
 const path = require("path");
+const authMiddleware = require("../middleware/authMiddleware");
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -24,12 +26,20 @@ const upload = multer({ storage });
 // Create Router
 const usersRoutes = express.Router();
 
+// Specific Route First
+usersRoutes.get("/profile", authMiddleware, usersController.getProfile);
+
+// General Route Second
 usersRoutes.get('/', usersController.getAllUsers);
-usersRoutes.delete('/:id', usersController.deleteUser);
-usersRoutes.post('/', upload.single("photo"), usersController.createUser);
 usersRoutes.post('/uploads', upload.single("image"), usersController.uploads);
+usersRoutes.post('/', upload.single("photo"), usersController.createUser);
+
+// Dynamic Route Third
+usersRoutes.delete('/:id', usersController.deleteUser);
 usersRoutes.get('/:id', usersController.viewUser);
 usersRoutes.put('/:id', upload.single("photo"), usersController.editUser);
+
+
 
 
 

@@ -71,7 +71,7 @@ const deleteUser = async (req, res) => {
 
 const createUser = async (req, res) => {
     console.log("req_body", req.body);
-        // console.log("filename",req.file.originalname);  
+    // console.log("filename",req.file.originalname);  
     console.log("name", req.body.name);
     const photo = req.file.originalname;
     try {
@@ -95,7 +95,7 @@ const createUser = async (req, res) => {
 
 
 const uploads = (req, res) => {
-    console.log("filename",req.file.originalname);  
+    console.log("filename", req.file.originalname);
     console.log("name", req.body.name);
     res.json({
         message: "Image uploaded successfully",
@@ -106,7 +106,7 @@ const uploads = (req, res) => {
 const viewUser = async (req, res) => {
     const id = req.params.id;
     try {
-        const datas = await db.query(`SELECT * FROM users WHERE id=?`,[id]);
+        const datas = await db.query(`SELECT * FROM users WHERE id=?`, [id]);
         res.status(200).json({
             message: `User Retrieved Successfully`,
             state: true,
@@ -171,5 +171,32 @@ const editUser = async (req, res) => {
     }
 };
 
+// Get Profile
+const getProfile = async (req, res) => {
+    try {
+        const [users] = await db.query(`SELECT id, name, email, role, created_at FROM users_table WHERE id=?`, [req.user.id]);
+        if (users.length === 0) {
+            return res.status(404).json({
+                state: false,
+                status: 404,
+                message: "User not Exist"
+            })
+        }
+        return res.status(200).json({
+            state: true,
+            status: 200,
+            message: "User Profile Retrieved Successfully",
+            data: users
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            state: false,
+            status: 500,
+            error: `Internal Server Error: ${error.message}`
+        });
+    }
+}
 
-module.exports = { getAllUsers, deleteUser, createUser, uploads, viewUser, editUser };
+
+module.exports = { getAllUsers, deleteUser, createUser, uploads, viewUser, editUser, getProfile };

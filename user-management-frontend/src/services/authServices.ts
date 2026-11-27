@@ -15,4 +15,24 @@ const login = async (data: LoginFormDataType) => {
     return response;
 }
 
-export { register, login };
+const logoutUser = async () => {
+    try {
+        const response = await api.post('/auth/logout');
+        return response;
+    }
+    finally {
+        tokenStore.clear();
+    }
+}
+
+const logoutAllUser = async () => {
+    try {
+        const response = await api.post('/auth/logout-all');
+        return response;
+    }
+    finally {
+        tokenStore.clear();
+    }
+}
+
+export { register, login, logoutUser, logoutAllUser };

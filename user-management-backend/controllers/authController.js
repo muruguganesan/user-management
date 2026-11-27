@@ -4,6 +4,7 @@ const { generateAccessToken, generateRefreshToken, hashToken } = require("../uti
 const crypto = require("crypto");
 const { refreshCookieOptions } = require("../utils/cookie");
 const jwt = require("jsonwebtoken");
+const { logoutSchema } = require("../schemas/authSchemas");
 
 const register = async (req, res) => {
     try {
@@ -117,7 +118,7 @@ const login = async (req, res) => {
 
 const refreshAccessToken = async (req, res) => {
     const oldRefeshToken = req.cookies.refreshToken;
-    console.log("oldRefeshToken",oldRefeshToken);
+    console.log("oldRefeshToken", oldRefeshToken);
     if (!oldRefeshToken) {
         return res.status(401).json({
             state: false,
@@ -133,7 +134,7 @@ const refreshAccessToken = async (req, res) => {
         });
     }
     catch (error) {
-            console.error("JWT verification error:", error.name, error.message);
+        console.error("JWT verification error:", error.name, error.message);
         return res.status(401).json({
             state: false,
             status: 401,
@@ -167,7 +168,7 @@ const refreshAccessToken = async (req, res) => {
 
         // Validate Token Ownership and family
         if (String(oldRecord.user_id) !== String(decoded.user_id) ||
-oldRecord.family_id !== decoded.family_id) {
+            oldRecord.family_id !== decoded.family_id) {
             await connection.rollback();
             return res.status(401).json({
                 state: false,
@@ -237,7 +238,7 @@ oldRecord.family_id !== decoded.family_id) {
             state: true,
             status: 200,
             message: "Token Refreshed Successfully",
-             accessToken: newAccessToken
+            accessToken: newAccessToken
         });
     }
     catch (error) {
@@ -253,4 +254,119 @@ oldRecord.family_id !== decoded.family_id) {
     }
 }
 
-module.exports = { register, login, refreshAccessToken };
+const logout = async (req, res) => {
+    const cookies = req.cookies;
+    const result = logoutSchema.safeParse(cookies);
+    const refreshToken = result.success ? result.data.refreshToken : undefined;
+
+ console.log("refreshTokeneeeee", refreshToken);
+
+    try {
+        const authHeader = req.headers.authorization;
+        const accessToken = authHeader?.split(" ")[1];
+        console.log("accessTokeneee", accessToken);
+
+        if (accessToken) {
+            const decoded = jwt.verify(
+                accessToken,
+                process.env.JWT_SECRET
+            );
+
+            console.log("decoded access token", decoded);
+
+            await db.query(
+                `INSERT INTO revoked_access_tokens (jti, expires_at)
+                 VALUES (?, FROM_UNIXTIME(?))`,
+                [decoded.jti, decoded.exp]
+            );
+        }
+
+        // Revoke refresh token in your existing implementation
+        // and clear its cookie.
+        if (refreshToken) {
+            const envSecret = process.env.JWT_REFRESH_SECRET
+            let decoded;
+            try {
+                decoded = jwt.verify(refreshToken, envSecret, {
+                    algorithms: ["HS256"]
+                });
+            }
+            catch (error) {
+                console.error("JWT Error: ", error);
+            }
+            if (decoded.family_id && decoded.user_id) {
+                console.log("decoded", decoded);
+                await db.query('UPDATE refresh_tokens SET revoked_at=COALESCE(revoked_at, UTC_TIMESTAMP()) WHERE user_id = ? AND family_id=?', [decoded.user_id, decoded.family_id]);
+            }
+        }
+
+        // Clear the browser cookie, even if it was missing or invalid.
+        const { maxAge, ...clearOptions } = refreshCookieOptions;
+        res.clearCookie("refreshToken", clearOptions);
+        return res.status(200).json({
+            state: true,
+            status: 200,
+            message: "Logged Out Successfully"
+        });
+    }
+    catch (error) {
+        const { maxAge, ...clearOptions } = refreshCookieOptions;
+        res.clearCookie("refreshToken", clearOptions);
+
+        return res.status(500).json({
+            state: false,
+            status: 500,
+            message: `Unable to complete logout - Error: ${error.message}`
+        })
+
+    }
+}
+
+const logoutAll = async (req, res) => {
+    const cookies = req.cookies;
+    const result = logoutSchema.safeParse(cookies);
+    const refreshToken = result.success ? result.data.refreshToken : undefined;
+    console.log("cookies", result);
+    try {
+        if (refreshToken) {
+            const envSecret = process.env.JWT_REFRESH_SECRET
+            let decoded;
+            try {
+                decoded = jwt.verify(refreshToken, envSecret, {
+                    algorithms: ["HS256"]
+                });
+            }
+            catch (error) {
+                console.error("JWT Error: ", error);
+            }
+            if (decoded.family_id && decoded.user_id) {
+                console.log("decoded", decoded);
+                await db.query('UPDATE refresh_tokens SET revoked_at=COALESCE(revoked_at, UTC_TIMESTAMP()) WHERE user_id = ?', [decoded.user_id]);
+            }
+        }
+
+        // Clear the browser cookie, even if it was missing or invalid.
+        const { maxAge, ...clearOptions } = refreshCookieOptions;
+        res.clearCookie("refreshToken", clearOptions);
+        return res.status(200).json({
+            state: true,
+            status: 200,
+            message: "Logged Out Successfully On all devices"
+        });
+    }
+    catch (error) {
+        const { maxAge, ...clearOptions } = refreshCookieOptions;
+        res.clearCookie("refreshToken", clearOptions);
+
+        return res.status(500).json({
+            state: false,
+            status: 500,
+            message: `Unable to complete logout - Error: ${error.message}`
+        })
+
+    }
+
+
+}
+
+module.exports = { register, login, refreshAccessToken, logout, logoutAll };

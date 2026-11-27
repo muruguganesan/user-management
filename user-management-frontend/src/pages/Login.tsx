@@ -14,13 +14,14 @@ import useLoginUser from '../hooks/reactQueryHooks/useLoginUser';
 import { useNavigate } from 'react-router-dom';
 import ReusableSnackbar from '../components/ReusableSnackbar/ReusableSnackbar';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 
 
 const Login = () => {
   const { mutate: LoginUser } = useLoginUser();
 
-  const { register, handleSubmit, formState: { errors }, watch, reset } = useForm<LoginFormDataType>({
+  const { register, handleSubmit, formState: { errors }, watch, reset, setError } = useForm<LoginFormDataType>({
     defaultValues: {
       email: "",
       password: ""
@@ -39,7 +40,7 @@ const Login = () => {
   // Snackbar functions
   const popOverOpenFn = () => setPopOverOpen(true);
   const popOverCloseFn = () => setPopOverOpen(false);
-const { setAuthenticated } = useAuth();
+  const { setAuthenticated } = useAuth();
 
   // Common success callback
   const handleSuccess = () => {
@@ -48,7 +49,7 @@ const { setAuthenticated } = useAuth();
     reset();
     setAuthenticated(true);
     setTimeout(() => {
-      navigate("/profile", {replace: true});
+      navigate("/profile", { replace: true });
     }, 2000);
   };
   const onSubmitFn = (data: LoginFormDataType) => {
@@ -56,7 +57,17 @@ const { setAuthenticated } = useAuth();
     LoginUser(data, {
       onSuccess: handleSuccess,
       onError: (error) => {
-        console.error("Failed to Login user", error);
+        // console.error("Failed to Login user:", error.message);
+        if (axios.isAxiosError(error)) {
+          const message = error.response?.data?.message;
+          console.log("Error Message:", message);
+          // setError("password", message);
+
+          setError("password", {
+            type: "server",
+            message: message
+          });
+        }
       }
 
     });

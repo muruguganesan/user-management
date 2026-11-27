@@ -8,11 +8,14 @@ import {
 
 import { restoreSession } from "../services/sessionService";
 import { tokenStore } from "../services/tokenStore";
+import { logoutAllUser, logoutUser } from "../services/authServices";
 
 type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
   setAuthenticated: (value: boolean) => void;
+  logout: () => void;
+  logoutAll: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -47,12 +50,30 @@ export const AuthProvider = ({
     };
   }, []);
 
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } finally {
+      setIsAuthenticated(false);
+    }
+  };
+
+  const logoutAll = async () => {
+    try {
+      await logoutAllUser();
+    } finally {
+      setIsAuthenticated(false);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
         isLoading,
-        setAuthenticated: setIsAuthenticated
+        setAuthenticated: setIsAuthenticated,
+        logout,
+        logoutAll
       }}
     >
       {children}

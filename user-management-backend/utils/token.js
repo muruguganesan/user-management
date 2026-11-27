@@ -10,7 +10,8 @@ const generateAccessToken = (user) => {
         {
 
             expiresIn: process.env.JWT_EXPIRES_TIME || '15m',
-            algorithm: 'HS256'
+            algorithm: 'HS256',
+            jwtid: crypto.randomUUID()
         }
     )
 }

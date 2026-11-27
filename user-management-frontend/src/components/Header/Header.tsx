@@ -17,15 +17,15 @@ const Header = () => {
     navigate("/login", { replace: true });
   }
   const handleLogoutAll =  () => {
-    console.log("Logout all handler");
+    // console.log("Logout all handler");
     logoutAll();
-    console.log("Logout all handler end");
+    // console.log("Logout all handler end");
 
     // navigate("/login", { replace: true });
   }
 
   console.log("access_token", tokenStore.get());
-  const x = 7;
+
   return (
     <header className={styles.header}>
       <div className="c">

@@ -13,7 +13,7 @@ export const Search = ({ placeholder = "Search...", search, handleSearch, clearS
     // );
     console.warn("searchParams", searchParams);
 
-    console.log("search", search.length)
+    // console.log("search", search.length)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -29,7 +29,7 @@ export const Search = ({ placeholder = "Search...", search, handleSearch, clearS
 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log("e.target.value", e.target.value);
+        // console.log("e.target.value", e.target.value);
         handleSearch(e);
     }
 

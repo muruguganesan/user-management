@@ -62,6 +62,7 @@ const AddUserForm = ({
 
   // Fetch individual user
   const { data: viewUserData } = useVewUser(Number(id));
+  console.log("viewUserData",viewUserData);
 
   const individualData = viewUserData?.data?.[0];
 

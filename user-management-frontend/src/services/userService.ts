@@ -1,4 +1,4 @@
-import type { IndividualUserResponse, UserResponse } from "../types/userServicesTypes";
+import type { IndividualUserResponse, ProfileResponse, UserResponse } from "../types/userServicesTypes";
 import api from "../api/axios";
 // import type { CreateUserOutput, EditUserOutput } from "../components/AddUserForm.tsx/AddUserForm";
 import type { UserOutput } from "../schemas/userValidation";
@@ -11,24 +11,24 @@ export type EditUserPayload = UserOutput;
 
 
 export const getUsers = async (page: number, limit: number, search: string): Promise<UserResponse> => {
-    const response = await api.get("/users", {
-        params: {
-            page,
-            limit,
-            search,
-        },
-    });
-    return response.data;
+  const response = await api.get("/users", {
+    params: {
+      page,
+      limit,
+      search,
+    },
+  });
+  return response.data;
 };
 
 export const deleteUser = async (id: number) => {
-    const response = await api.delete(`/users/${id}`);
-    return response.data;
+  const response = await api.delete(`/users/${id}`);
+  return response.data;
 };
 
-export const viewUser = async (id: number): Promise<IndividualUserResponse> => {
-    const response = await api.get(`/users/${id}`);
-    return response.data;
+export const viewUser = async (id: number): Promise<UserResponse> => {
+  const response = await api.get(`/users/${id}`);
+  return response.data;
 };
 
 // export const addUser = async (data: CreateUserOutput) => {
@@ -96,12 +96,19 @@ export const editUser = async ({
     formData.append("photo", data.photo);
   }
 
-    // Debug FormData
-//   for (const [key, value] of formData.entries()) {
-//     console.log(key, value);
-//   }
+  // Debug FormData
+  //   for (const [key, value] of formData.entries()) {
+  //     console.log(key, value);
+  //   }
 
   const response = await api.put(`/users/${id}`, formData);
 
   return response.data;
 };
+
+export const getProfile = async ():Promise<ProfileResponse> => {
+  // getProfile /profile
+  const response = await api.get('/users/profile');
+  console.log("res", response.data);
+  return response.data;
+}

@@ -173,6 +173,7 @@ const editUser = async (req, res) => {
 
 // Get Profile
 const getProfile = async (req, res) => {
+    console.log("profile", req);
     try {
         const [users] = await db.query(`SELECT id, name, email, role, created_at FROM users_table WHERE id=?`, [req.user.id]);
         if (users.length === 0) {

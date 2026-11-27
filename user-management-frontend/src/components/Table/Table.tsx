@@ -25,7 +25,7 @@ const Table = () => {
     const { data, isLoading, isError, error } = useUsers(page, limit, searchBefore);
     const { mutate: removeUser } = useDeleteUser();
 
-    console.log("data", data);
+    // console.log("data", data);
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);

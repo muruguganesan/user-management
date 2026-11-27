@@ -1,14 +1,20 @@
 import Chip from '../../components/Button/Chip'
 import { Check, Info, Mail, Star, User, UserShield } from 'lucide-react'
 import styles from "./profile.module.css";
+// import getProfileDetails from '../../hooks/reactQueryHooks/getProfileDetails';
+import useProfileDetails from '../../hooks/reactQueryHooks/getProfileDetails';
 
 const Profile = () => {
+    const { data: profile_details } = useProfileDetails();
+
+    console.log("data", profile_details);
+    const { name = "Name", email = "example@gmail.com", role = "admin" } = profile_details?.data[0] ?? {};
     return (
         <div className={styles.profile_wrapper}>
             <div className="c">
                 <div className={styles.profile_sec_wrap}>
-                    <h1 className="profile_main_tit">Murugu ganesan</h1>
-                    <p className={styles.profile_icon_text}><Mail /><span>muruguganesan@gmail.com</span></p>
+                    <h1 className="profile_main_tit">{name}</h1>
+                    <p className={styles.profile_icon_text}><Mail /><span>{email}</span></p>
                     <div className="profile_chip_wrap">
                         <Chip icon={<User />} text={'user'} />
 
@@ -25,14 +31,14 @@ const Profile = () => {
                                 <User />
                                 <h6 className={styles.profile_sub_tit}>Name</h6>
                             </div>
-                            <p>Murugu Ganesan</p>
+                            <p>{name}</p>
                         </div>
                         <div className="profile_sec_col">
                             <div className={styles.profile_icon_text}>
                                 <Mail />
                                 <h6 className={styles.profile_sub_tit}>Email</h6>
                             </div>
-                            <p>muruguganesan@gmail.com</p>
+                            <p>{email}</p>
 
                         </div>
                         <div className="profile_sec_col">
@@ -40,7 +46,7 @@ const Profile = () => {
                                 <UserShield />
                                 <h6 className={styles.profile_sub_tit}>Role</h6>
                             </div>
-                            <Chip text={"User"} />
+                            <Chip text={role} />
 
                         </div>
 

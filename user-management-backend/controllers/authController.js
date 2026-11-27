@@ -74,6 +74,12 @@ const login = async (req, res) => {
             });
         }
 
+        // Email OTP Verification for MFA (6 digit)
+
+        // Check OTP, Expiry and Attempt Limits
+
+
+        // Generate Access Token and Refresh Token
         // Generate Token Family ID
         const family_id = crypto.randomUUID();
 
@@ -150,11 +156,11 @@ const refreshAccessToken = async (req, res) => {
         const oldHashRefreshToken = hashToken(oldRefeshToken);
 
         // Lock the Token Record during Rotation
-        const [tokens] = await db.query('SELECT * FROM refresh_tokens WHERE token_hash=? FOR UPDATE', [oldHashRefreshToken]);
+        const [tokens] = await connection.query('SELECT * FROM refresh_tokens WHERE token_hash=? FOR UPDATE', [oldHashRefreshToken]);
 
         // If Token is not there
         if (tokens.length === 0) {
-            await db.query('UPDATE refresh_tokens SET revoked_at=COALESCE(revoked_at, UTC_TIMESTAMP()) WHERE family_id=?', [decoded.family_id]);
+            await connection.query('UPDATE refresh_tokens SET revoked_at=COALESCE(revoked_at, UTC_TIMESTAMP()) WHERE family_id=?', [decoded.family_id]);
             await connection.commit();
             res.clearCookie("refreshToken", refreshCookieOptions);
             return res.status(401).json({
@@ -200,7 +206,7 @@ const refreshAccessToken = async (req, res) => {
         }
 
         // Get Current User
-        const [users] = await db.query('SELECT id, name, email, role FROM users_table WHERE id=?', [oldRecord.user_id]);
+        const [users] = await connection.query('SELECT id, name, email, role, token_version FROM users_table WHERE id=?', [oldRecord.user_id]);
 
         if (users.length === 0) {
             await connection.rollback();
@@ -216,7 +222,7 @@ const refreshAccessToken = async (req, res) => {
         const newAccessToken = generateAccessToken(user);
         // Generate New Refresh Token
         const newRefreshToken = generateRefreshToken(user, oldRecord.family_id);
-        // Genearate New Hashed Refresh Token
+        // Generate New Hashed Refresh Token
         const newHashedRefreshToken = hashToken(newRefreshToken);
 
         // Insert Replacement Token

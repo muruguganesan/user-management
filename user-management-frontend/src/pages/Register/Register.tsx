@@ -39,7 +39,7 @@ const Register = () => {
   };
 
   const onSubmitFn = (data: RegisterFormDataType) => {
-    console.log(data);
+    // console.log(data);
     registerUser(data, {
       onSuccess: handleSuccess,
       onError: (error) => {

@@ -31,7 +31,7 @@ const Login = () => {
   const [passwordTypes, setPasswordTypes] = useState({
     passwordType: "password"
   });
-  console.log("passwordTypes", passwordTypes);
+  // console.log("passwordTypes", passwordTypes);
   const handlePasswordType = (type: string, value: string) => {
     setPasswordTypes((prev) => ({ ...prev, [type]: value }))
   }
@@ -53,7 +53,7 @@ const Login = () => {
     }, 2000);
   };
   const onSubmitFn = (data: LoginFormDataType) => {
-    console.log("data", data);
+    // console.log("data", data);
     LoginUser(data, {
       onSuccess: handleSuccess,
       onError: (error) => {

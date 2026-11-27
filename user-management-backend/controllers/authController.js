@@ -54,7 +54,7 @@ const login = async (req, res) => {
         const { email, password } = req.body;
 
         // Check User exist or not
-        const [users] = await db.query('SELECT id, name, email, role, password FROM users_table WHERE email=?', [email]);
+        const [users] = await db.query('SELECT id, name, email, role, password, token_version FROM users_table WHERE email=?', [email]);
         if (users.length === 0) {
             return res.status(401).json({
                 state: false,
@@ -323,50 +323,67 @@ const logout = async (req, res) => {
 }
 
 const logoutAll = async (req, res) => {
-    const cookies = req.cookies;
-    const result = logoutSchema.safeParse(cookies);
-    const refreshToken = result.success ? result.data.refreshToken : undefined;
-    console.log("cookies", result);
-    try {
-        if (refreshToken) {
-            const envSecret = process.env.JWT_REFRESH_SECRET
-            let decoded;
-            try {
-                decoded = jwt.verify(refreshToken, envSecret, {
-                    algorithms: ["HS256"]
-                });
-            }
-            catch (error) {
-                console.error("JWT Error: ", error);
-            }
-            if (decoded.family_id && decoded.user_id) {
-                console.log("decoded", decoded);
-                await db.query('UPDATE refresh_tokens SET revoked_at=COALESCE(revoked_at, UTC_TIMESTAMP()) WHERE user_id = ?', [decoded.user_id]);
-            }
-        }
+    const connection = await db.getConnection();
+    console.log("req user", req.user);
 
-        // Clear the browser cookie, even if it was missing or invalid.
+    try {
+        // Get authenticated user ID from access token middleware
+        const userId = req.user.user_id;
+        console.log("user_id", userId);
+        console.log("user", req.user);
+
+        await connection.beginTransaction();
+
+        console.log("Revoke all existing access tokens start");
+        // 1. Revoke all existing access tokens
+        await connection.query(
+            `UPDATE users_table
+             SET token_version = token_version + 1
+             WHERE id = ?`,
+            [userId]
+        );
+
+        console.log("Revoke all refresh tokens across devices start");
+
+        // 2. Revoke all refresh tokens across devices
+        await connection.query(
+            `UPDATE refresh_tokens
+             SET revoked_at = COALESCE(revoked_at, UTC_TIMESTAMP())
+             WHERE user_id = ?`,
+            [userId]
+        );
+
+        await connection.commit();
+
+        // 3. Clear current browser refresh cookie
         const { maxAge, ...clearOptions } = refreshCookieOptions;
+
         res.clearCookie("refreshToken", clearOptions);
+console.log("Logout all device success");
         return res.status(200).json({
             state: true,
             status: 200,
-            message: "Logged Out Successfully On all devices"
+            message: "Logged out successfully from all devices"
         });
-    }
-    catch (error) {
+
+    } catch (error) {
+
+        await connection.rollback();
+
+        console.error("Logout all error:", error);
+
         const { maxAge, ...clearOptions } = refreshCookieOptions;
         res.clearCookie("refreshToken", clearOptions);
 
         return res.status(500).json({
             state: false,
             status: 500,
-            message: `Unable to complete logout - Error: ${error.message}`
-        })
+            message: `Unable to complete logout: ${error.message}`
+        });
 
+    } finally {
+        connection.release();
     }
-
-
-}
+};
 
 module.exports = { register, login, refreshAccessToken, logout, logoutAll };

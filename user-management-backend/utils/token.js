@@ -5,6 +5,7 @@ const generateAccessToken = (user) => {
     return jwt.sign({
         role: user.role,
         user_id: String(user.id),
+        token_version: Number(user.token_version)
     },
         process.env.JWT_SECRET,
         {
